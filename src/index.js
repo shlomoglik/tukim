@@ -1,21 +1,22 @@
 import m from 'mithril';
-
+import { app } from "./firebase/firebaseConfig"
 const root = document.body;
-
-
 import './index.scss';
-import { Login } from './views/Login/Login';
 
-//functions
+//FUNCTIONS
+export const auth = firebase.auth(app);
+export const db = firebase.firestore();
 // m.route.prefix('?')
 
-//Views
+//VIEWS
+import { Login } from './views/Login/Login';
+import { Main } from './views/Main/Main';
 
 
-//data
+//DATA
 
 //routes config
 m.route(root, "/login", {
-    "/login": Login
-    // "/login": {view:()=>m(".","hello world!")}
+    "/login": Login,
+    "/": Main,
 });

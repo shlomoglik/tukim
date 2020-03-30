@@ -1,13 +1,45 @@
-body {
-  direction: rtl;
-  font-size: 16px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
+/* GLOBAL RESET */
+*{
+  padding: 0;
+  margin: 0;
+  &,
+  &::before,
+  &::after{
+      font-size: 62.5%;
+      box-sizing: border-box;
+      @media only screen and (max-width: 1200px) {
+          font-size: 56.25%;
+      }
+      @media only screen and (max-width: 320px) {
+          font-size: 50%;
+      }
+      @media only screen and (min-width: 1200px) {
+        font-size: 75%;
+      }
+    }
+  }
+  body{
+    direction: rtl;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 3rem;
+    line-height: 1.8;
+    user-select: none;
+  }
 input,button {
+  font: inherit;
   border: none;
   outline: none;
-  font-size: 24px;
+  font-size: 2.8rem;
+  border-radius: 2rem;
+  padding: 1.5rem;
 }
 label {
-    font-size: 20px;
+    font-size: 2.4rem;
+}
+
+.logo{
+  width: 8rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }

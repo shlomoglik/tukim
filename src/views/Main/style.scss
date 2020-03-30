@@ -1,0 +1,23 @@
+.main {
+    padding: 5rem;
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fit,minmax(30rem,max-content));
+    justify-content: center;
+    .cell {
+        height: 30rem;
+        background: burlywood;
+        border: 1px solid lightblue;
+        display: grid;
+        gap: 1rem;
+        &__index{
+            grid-row: 1;
+            grid-column: 1/5;
+        }
+        &__item{
+            display: grid;
+            gap: 1rem;
+        }
+    }
+
+}

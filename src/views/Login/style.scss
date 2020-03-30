@@ -1,25 +1,33 @@
-.login{
+.login {
     min-height: 100vh;
-    background: cornflowerblue;
+    background-image: url("/img/sky-bg-1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     color: white;
     display: grid;
-    grid-gap: 30px;
+    grid-gap: 3rem;
     align-content: center;
     justify-content: center;
     align-items: center;
-    &__heading{
-        font-size: 36px;
-        padding: 10px;
+    max-width: 100vw;
+    overflow: hidden;
+    &__heading {
+        font-size: 4rem;
+        padding: 2rem;
     }
-    &__label{
+    &__input {
         display: grid;
         gap: 1rem;
     }
-    &__button{
+    &__label {
+        font-size: 2.4rem;
+    }
+
+    &__button {
+        margin-top: 10rem;
         cursor: pointer;
         color: white;
         background: #006eff;
-        border-radius: 5px;
-        padding: 10px;
     }
 }
