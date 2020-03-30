@@ -1,0 +1,25 @@
+.login{
+    min-height: 100vh;
+    background: cornflowerblue;
+    color: white;
+    display: grid;
+    grid-gap: 30px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    &__heading{
+        font-size: 36px;
+        padding: 10px;
+    }
+    &__label{
+        display: grid;
+        gap: 1rem;
+    }
+    &__button{
+        cursor: pointer;
+        color: white;
+        background: #006eff;
+        border-radius: 5px;
+        padding: 10px;
+    }
+}

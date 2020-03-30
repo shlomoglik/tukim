@@ -1,3 +1,1 @@
-const settings = {}
-
-module.exports = settings;
+export const settings = {}

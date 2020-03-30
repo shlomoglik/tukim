@@ -1,11 +1,18 @@
 const firebaseConfig = {
-  // copy config from firestore
-  };
-  
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth(app);
-  const db = firebase.firestore();
+  apiKey: "AIzaSyC5ofScoUtbnlgCHS1kfm8QQL6SL4A-v3g",
+  authDomain: "tukim-app.firebaseapp.com",
+  databaseURL: "https://tukim-app.firebaseio.com",
+  projectId: "tukim-app",
+  storageBucket: "tukim-app.appspot.com",
+  messagingSenderId: "215555866371",
+  appId: "1:215555866371:web:90ba3ba155564f661ab336",
+  measurementId: "G-DBZX9Y2REH"
+};
 
-  module.exports = {auth,db};
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth(app);
+const db = firebase.firestore();
+
+module.exports = { auth, db };
 
