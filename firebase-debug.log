@@ -41,3 +41,46 @@
 [info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
 [debug] [2020-03-31T11:32:33.979Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: exited
 [debug] [2020-03-31T11:32:33.979Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: FINISHED
+[debug] [2020-03-31T14:51:37.568Z] ----------------------------------------------------------------------
+[debug] [2020-03-31T14:51:37.570Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2020-03-31T14:51:37.571Z] CLI Version:   7.16.1
+[debug] [2020-03-31T14:51:37.571Z] Platform:      win32
+[debug] [2020-03-31T14:51:37.571Z] Node Version:  v10.15.2
+[debug] [2020-03-31T14:51:37.572Z] Time:          Tue Mar 31 2020 17:51:37 GMT+0300 (GMT+03:00)
+[debug] [2020-03-31T14:51:37.572Z] ----------------------------------------------------------------------
+[debug] [2020-03-31T14:51:37.572Z] 
+[debug] [2020-03-31T14:51:37.590Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-31T14:51:37.590Z] > authorizing via signed-in user
+[debug] [2020-03-31T14:51:37.590Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
+[debug] [2020-03-31T14:51:37.592Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-03-31T14:51:37.592Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-03-31T14:51:37.931Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-31T14:51:37.944Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
+
+[debug] [2020-03-31T14:51:38.415Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-31T14:51:38.418Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
+ 
+[debug] [2020-03-31T14:51:38.938Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\User\Desktop\developing\tukim'...
+[info] 
+[debug] [2020-03-31T14:51:38.959Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
+ 
+[debug] [2020-03-31T14:51:39.824Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "10"
+[info] +  functions: functions emulator started at http://localhost:5001
+[info] i  functions: Watching "C:\Users\User\Desktop\developing\tukim\functions" for Cloud Functions...
+[debug] [2020-03-31T14:51:41.064Z] [worker-pool] addWorker(~diagnostic~)
+[debug] [2020-03-31T14:51:41.064Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
+[debug] [2020-03-31T14:51:41.064Z] [worker-pool] submitWork(triggerId=)
+[debug] [2020-03-31T14:51:41.066Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\10136
+[debug] [2020-03-31T14:51:41.069Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: BUSY
+[debug] [2020-03-31T14:51:41.583Z] [runtime-status] [10136] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"}
+[debug] [2020-03-31T14:51:41.586Z] [runtime-status] [10136] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2020-03-31T14:51:41.621Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: exited
+[debug] [2020-03-31T14:51:41.621Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: FINISHED
