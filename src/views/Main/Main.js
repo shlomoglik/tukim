@@ -1,6 +1,7 @@
 import m from "mithril";
 
 import "./style.scss";
+import { Icon } from "../icon/Icon";
 
 export const Main = node => {
     const formatDateDisplay = (date) => {
@@ -9,6 +10,7 @@ export const Main = node => {
         if (Number(m).toString() < 10) m = "0" + m
         let d = date.getDate();
         if (Number(d).toString() < 10) d = "0" + d
+        if (isNaN(y) || isNaN(m) || isNaN(d)) return "--ללא--"
         const output = d + "/" + m + "/" + y.toString().substring(2);
         return output;
     }
@@ -46,61 +48,76 @@ export const Main = node => {
     const model = {
         headers: {
             "cell": { label: "תא", type: "number" },
-            "hatala": { label: "הטלה", type: "date" },
-            "bekia": { label: "בקיעה", type: "date" },
+            "hatalaTime": { label: "הטלה", type: "date" },
+            "bekiaTime": { label: "בקיעה", type: "date" },
+            "hafradaTime": { label: "הפרדה", type: "date" },
+            "status": { label: "נוכחי", type: "text" },
             "count": { label: "כמות", type: "number" },
-            "hafrada": { label: "הפרדה", type: "date" },
         },
         data: [
             //expample:
-            { cell: 1, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 2, hatala: "2020/03/30", bekia: "2020/03/30", count: 3, hafrada: "2020/03/30" },
-            { cell: 3, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 4, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 5, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 6, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 7, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 8, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 9, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 10, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 11, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 12, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 13, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 14, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 15, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
-            { cell: 16, hatala: "2020/03/30", bekia: "2020/03/30", count: 2, hafrada: "2020/03/30" },
+            { cell: 1, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" ,status:"הפרדה"},
+            { cell: 2, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 3, hafradaTime: "2020/03/30" },
+            { cell: 3, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 4, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 5, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 6, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 7, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 8, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 9, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 10, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 11, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 12, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 13, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 14, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 15, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 16, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30" },
+            { cell: 17, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "" },
+            { cell: 18, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "" },
+            { cell: 19, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "" },
+            { cell: 20, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "" },
+            { cell: 21, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "" },
         ],
     }
     return {
         editValue: { ind: -1, key: "" },
         view: vnode => {
-            return m(".main", [
-                model.data.map((doc, ind) => {
-                    return m(".cell", [
-                        m(".cell__index", { onclick: e => resetEdit(e) }, doc.cell),
-                        m(".cell__item hatala",
-                            m(".cell__caption", model.headers.hatala.label),
-                            isEdit(ind, "hatala") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hatala)), oninput: e => editValue(e, ind, "hatala") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hatala") }, formatDateDisplay(new Date(doc.hatala)))
-                        ),
-                        m(".cell__item bekia",
-                            m(".cell__caption", model.headers.bekia.label),
-                            isEdit(ind, "bekia") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.bekia)), oninput: e => editValue(e, ind, "bekia") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "bekia") }, formatDateDisplay(new Date(doc.bekia)))
-                        ),
-                        m(".cell__item hafrada",
-                            m(".cell__caption", model.headers.hafrada.label),
-                            isEdit(ind, "hafrada") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hafrada)), oninput: e => editValue(e, ind, "hafrada") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hafrada") }, formatDateDisplay(new Date(doc.hafrada)))
-                        ),
-                        m(".cell__item count",
-                            m(".cell__caption", model.headers.count.label),
-                            isEdit(ind, "count") ? m("input.cell__input[type=number]", { value: doc.count, oninput: e => editValue(e, ind, "count") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "count") }, doc.count)
-                        ),
-                        m(".cell__button","V"),
-                        m(".cell__button","V"),
-                        m(".cell__button","V"),
-                        m(".cell__button","+"),
-                    ])
-                })
-            ])
+            return m(".mainPage",
+                m("img.logo", { src: "./img/logo.png" }),
+                m(".content", [
+                    model.data.map((doc, ind) => {
+                        return m(".cell", [
+                            m(".cell__index", { onclick: e => resetEdit(e) }, doc.cell),
+                            m(".cell__item hatalaTime",
+                                m(".cell__caption", model.headers.hatalaTime.label),
+                                isEdit(ind, "hatalaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hatalaTime)), oninput: e => editValue(e, ind, "hatalaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hatalaTime") }, formatDateDisplay(new Date(doc.hatalaTime)))
+                            ),
+                            m(".cell__item bekiaTime",
+                                m(".cell__caption", model.headers.bekiaTime.label),
+                                isEdit(ind, "bekiaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.bekiaTime)), oninput: e => editValue(e, ind, "bekiaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "bekiaTime") }, formatDateDisplay(new Date(doc.bekiaTime)))
+                            ),
+                            m(".cell__item hafradaTime",
+                                m(".cell__caption", model.headers.hafradaTime.label),
+                                isEdit(ind, "hafradaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hafradaTime)), oninput: e => editValue(e, ind, "hafradaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hafradaTime") }, formatDateDisplay(new Date(doc.hafradaTime)))
+                            ),
+                            m(".cell__item count",
+                                m(".cell__caption", model.headers.count.label),
+                                isEdit(ind, "count") ? m("input.cell__input[type=number]", { value: doc.count, oninput: e => editValue(e, ind, "count") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "count") }, doc.count)
+                            ),
+                            m(".cell__buttons", [
+                                m("label.cell__action", [
+                                    m("span", "אפס"),
+                                    m(Icon, { class: "cell__button", icon: "icon-circle-with-minus" })
+                                ]),
+                                m("label.cell__action", [
+                                    m("span", "הערה"),
+                                    m(Icon, { class: "cell__button", icon: "icon-chat" })
+                                ]),
+                            ])
+                        ])
+                    })
+                ])
+            )
         }
     }
 }

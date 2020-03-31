@@ -1,0 +1,19 @@
+.icon{
+    //initial size
+    min-width: 2rem;
+    min-height: 2rem;
+    fill:currentColor;
+    padding:1rem;
+    &--md{
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+    &--lg{
+        width: 3rem;
+        height: 3rem;
+    }
+    &--xl{
+        width: 4rem;
+        height: 4rem;
+    }
+}
