@@ -1,0 +1,14 @@
+export const AUTOCOMPLETE = "autocomplete";
+export const AUTOFOCUS = "autofocus";
+export const CHECKED = "checked";
+export const DISABLED = "disabled";
+export const READONLY = "readonly";
+export const REQUIRED = "required";
+export const MAX = "max";
+export const MIN = "min";
+export const MINLENGTH = "minLength";
+export const MAXLENGTH = "maxLength";
+export const MULTIPLE = "multiple";
+export const PATTERN = "pattern";
+export const PLACEHOLDER = "placeholder";
+export const STEP = "step";

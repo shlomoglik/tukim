@@ -35,15 +35,18 @@
         justify-items: center;
         gap: 1rem;
         font-size: 2.8rem;
-        position: relative;
+        position: relative; 
+        border: 1px dotted var(--color-non-active);
+        border-radius: 1rem;
+        padding: .5rem;
     }
     &__mark {
         position: absolute;
-        content: "";
         top: 0;
-        width: 2rem;
-        height: 2rem;
-        color: var(--color-non-active);
+        transform: translateY(-80%);
+        width: 4rem;
+        height: 4rem;
+        color: var( --color-red);
     }
     &__caption {
         color: cornflowerblue;
@@ -57,10 +60,10 @@
         }
     }
     &__value {
-        max-width: 100%;
+        width: 100%;
         cursor: pointer;
         &:hover {
-            border-bottom: 1px dotted lightgray;
+            border: 1px dotted lightgray;
             color: gray;
         }
     }
@@ -88,7 +91,8 @@
         justify-content: center;
         align-items: center;
         span {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
+            color: var(--color-non-active);
         }
     }
     &__button {

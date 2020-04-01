@@ -2,10 +2,16 @@ import m from "mithril";
 
 import "./style.scss";
 import { Icon } from "../icon/Icon";
+import { dateValue, formatDateDisplay, distDays, setPropetiesToComponent, validateInput } from "../../js/utils";
+import { REQUIRED, MIN, MAX } from "../../js/inputAttrs";
 
+// TODO:
+// filters
+// views
+// Top
 export const Main = node => {
 
-    const DGIRA_DUE = 20;
+    const DGIRA_DUE = 19;
     const HAFRADA_DUE = 40;
 
     const STATUS = {
@@ -13,28 +19,12 @@ export const Main = node => {
         verifired: "verifired",
         estimate: "estimate"
     }
-
-    const formatDateDisplay = (date) => {
-        const y = date.getFullYear();
-        let m = date.getMonth(); m++;
-        if (Number(m).toString() < 10) m = "0" + m
-        let d = date.getDate();
-        if (Number(d).toString() < 10) d = "0" + d
-        if (isNaN(y) || isNaN(m) || isNaN(d)) return "--ללא--"
-        const output = d + "/" + m + "/" + y.toString().substring(2);
-        return output;
+    const CELL_STATUS = {
+        active: "active",
+        empty: "empty",
+        archive: "archive"
     }
 
-    const dateValue = (date) => {
-        const y = date.getFullYear();
-        let m = date.getMonth(); m++;
-        if (Number(m).toString() < 10) m = "0" + m
-        let d = date.getDate();
-        if (Number(d).toString() < 10) d = "0" + d;
-        if (isNaN(y) || isNaN(m) || isNaN(d)) return ""
-        const output = y + "-" + m + "-" + d;
-        return output;
-    }
 
     const toggleEdit = (e, ind, key) => {
         e.stopPropagation();
@@ -43,50 +33,124 @@ export const Main = node => {
         }
     }
 
-    const editValue = (e, ind, key) => {
-        model.data[ind][key] = e.target.value;
+
+    const editValue = (e, ind, key, _value) => {
+        const value = _value || e.target.value;
+        const { valid, errorMsgs } = validateInput(model.headers[key], value, model.data[ind]);
+        if (valid) {
+            model.data[ind][key] = value;
+        } else {
+            alert(`לא חוקי \n${errorMsgs.join("\n")}`)
+        }
     }
 
+    const setDefaultValue = (ind, key) => {
+        const existValue = model.data[ind][key]
+        switch (key) {
+            case "count":
+                const newValue = parseInt(existValue) + 1;
+                editValue(null, ind, key, newValue)
+                break;
+            default:
+                if (existValue === "") {
+                    editValue(null, ind, key, new Date().toISOString())
+                }
+        }
+    }
 
     const resetEdit = e => {
         e.stopPropagation();
         node.state.editValue = { ind: -1, key: "" }
     }
 
+    const getValue = (val, type) => {
+        // if (!val) return ""
+        switch (type) {
+            case "date": return dateValue(new Date(val))
+            case "number": return Number(val)
+            case "text": return val
+            default: return val || ""
+        }
+    }
+    const getDisplayValue = (val, type) => {
+        switch (type) {
+            case "date":
+                return val ? formatDateDisplay(new Date(val)) : "--ללא--"
+            case "number":
+                return val ? Number(val) : 0
+            case "text":
+                return val || ""
+            default:
+                return val || ""
+        }
+    }
+
     const isEdit = (ind, key) => ind === node.state.editValue.ind && key === node.state.editValue.key
+
+    const getWarning = (doc, ind, headerKey) => {
+        if (headerKey === "hatalaTime") {
+            if (doc[headerKey] === "") return true
+        } else if (headerKey === "bekiaTime") {
+            const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+            if (doc.hatalaTime !== "" &&
+                // doc.bekiaStatus !== STATUS.verifired &&
+                doc.bekiaTime === "" &&
+                distFromHatala > (DGIRA_DUE - 5)
+            )
+                return true
+        } else if (headerKey === "hafradaTime") {
+            const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
+            if (doc.bekiaTime !== "" &&
+                doc.hafradaTime === "" &&
+                distFromBekia > (HAFRADA_DUE - 5)
+            )
+                return true;
+        }
+        return false;
+    }
+
+    const resetCell = (e, ind) => {
+        model.data[ind].hatalaTime = "";
+        model.data[ind].bekiaTime = "";
+        model.data[ind].hafradaTime = "";
+        model.data[ind].count = 0;
+    }
 
     const model = {
         headers: {
-            "cell": { label: "תא", type: "number" },
-            "hatalaTime": { label: "הטלה", type: "date" },
-            "bekiaTime": { label: "בקיעה", type: "date" },
-            "hafradaTime": { label: "הפרדה", type: "date" },
-            "status": { label: "נוכחי", type: "text" },
-            "count": { label: "כמות", type: "number" },
+            "cellIndex": { label: "תא", type: "number", src: "cells/:docID", props: [{ [REQUIRED]: true }] },
+            "cellStatus": { label: "נוכחי", type: "text", src: "cells/:docID" },
+            "hatalaTime": { label: "הטלה", type: "date", src: "cells/:docID", props: [{ [MAX]: dateValue(new Date()) }] },
+            "bekiaTime": { label: "בקיעה", type: "date", src: "cells/:docID/sessions/:sessionID", props: [{ [MAX]: dateValue(new Date()) }] },
+            "hafradaTime": { label: "הפרדה", type: "date", src: "cells/:docID/sessions/:sessionID", props: [{ [MAX]: dateValue(new Date()) }] },
+            "count": { label: "כמות", type: "number", src: "cells/:docID/sessions/:sessionID", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
+        },
+        forms: {
+            "items": ["hatalaTime", "bekiaTime", "hafradaTime", "count"]
         },
         data: [
             //expample:
-            { cell: 1, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 2, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 3, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 3, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 4, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 5, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 6, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 7, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 8, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 9, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 10, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 11, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 12, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 13, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 14, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 15, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 16, hatalaTime: "2020/03/30", bekiaTime: "2020/03/30", count: 2, hafradaTime: "2020/03/30", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.verifired, hafradaTime: STATUS.estimate },
-            { cell: 17, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaTime: STATUS.none },
-            { cell: 18, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaTime: STATUS.none },
-            { cell: 19, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaTime: STATUS.none },
-            { cell: 20, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaTime: STATUS.none },
-            { cell: 21, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaTime: STATUS.none },
+            { cellIndex: 1, hatalaTime: "2020-03-02", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 2, hatalaTime: "2020-03-02", bekiaTime: "", count: 3, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 3, hatalaTime: "2020-03-02", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 4, hatalaTime: "2020-03-02", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 5, hatalaTime: "2020-03-02", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 6, hatalaTime: "2020-03-02", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 7, hatalaTime: "2020-03-01", bekiaTime: "", count: 2, hafradaTime: "", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 8, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 9, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 10, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 11, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 12, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 13, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 14, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 15, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 16, hatalaTime: "2020-03-01", bekiaTime: "2020-04-01", count: 2, hafradaTime: "2020-04-01", hatalaStatus: STATUS.verifired, bekiaStatus: STATUS.estimate, hafradaStatus: STATUS.estimate },
+            { cellIndex: 17, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaStatus: STATUS.none },
+            { cellIndex: 18, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaStatus: STATUS.none },
+            { cellIndex: 19, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaStatus: STATUS.none },
+            { cellIndex: 20, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaStatus: STATUS.none },
+            { cellIndex: 21, hatalaTime: "", bekiaTime: "", count: 0, hafradaTime: "", hatalaStatus: STATUS.none, bekiaStatus: STATUS.none, hafradaStatus: STATUS.none },
         ],
     }
     return {
@@ -97,28 +161,26 @@ export const Main = node => {
                 m(".content", [
                     model.data.map((doc, ind) => {
                         return m(".cell", [
-                            m(".cell__index", { onclick: e => resetEdit(e) }, doc.cell),
-                            m(".cell__item hatalaTime",
-                                m(Icon,{class:"cell__mark",icon:"icon-v"}),
-                                m(".cell__caption", model.headers.hatalaTime.label),
-                                isEdit(ind, "hatalaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hatalaTime)), oninput: e => editValue(e, ind, "hatalaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hatalaTime") }, formatDateDisplay(new Date(doc.hatalaTime)))
-                            ),
-                            m(".cell__item bekiaTime",
-                                m(".cell__caption", { class: "cell__caption--estimate" }, model.headers.bekiaTime.label),
-                                isEdit(ind, "bekiaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.bekiaTime)), oninput: e => editValue(e, ind, "bekiaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "bekiaTime") }, formatDateDisplay(new Date(doc.bekiaTime)))
-                            ),
-                            m(".cell__item hafradaTime",
-                                m(".cell__caption", model.headers.hafradaTime.label),
-                                isEdit(ind, "hafradaTime") ? m("input.cell__input[type=date]", { value: dateValue(new Date(doc.hafradaTime)), oninput: e => editValue(e, ind, "hafradaTime") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "hafradaTime") }, formatDateDisplay(new Date(doc.hafradaTime)))
-                            ),
-                            m(".cell__item count",
-                                m(".cell__caption", model.headers.count.label),
-                                isEdit(ind, "count") ? m("input.cell__input[type=number]", { value: doc.count, oninput: e => editValue(e, ind, "count") }) : m(".cell__value", { onclick: e => toggleEdit(e, ind, "count") }, doc.count)
-                            ),
+                            m(".cell__index", { onclick: e => resetEdit(e) }, doc.cellIndex),
+                            model.forms.items.map(headerKey => {
+                                const field = model.headers[headerKey];
+                                const isWarning = getWarning(doc, ind, headerKey);
+                                return m(".cell__item",
+                                    m(".cell__caption", { onclick: e => setDefaultValue(ind, headerKey) }, field.label),
+                                    isWarning ? m(Icon, { class: "cell__mark", icon: "icon-warning" }) : null,
+                                    isEdit(ind, headerKey) ?
+                                        m(`input.cell__input[type=${field.type || "text"}]`, {
+                                            value: getValue(doc[headerKey], field.type),
+                                            oninput: e => editValue(e, ind, headerKey),
+                                            oncreate: el => setPropetiesToComponent(el, field.props)
+                                        }) :
+                                        m(".cell__value", { onclick: e => toggleEdit(e, ind, headerKey) }, getDisplayValue(doc[headerKey], field.type))
+                                )
+                            }),
                             m(".cell__buttons", [
                                 m("label.cell__action", [
                                     m("span", "אפס"),
-                                    m(Icon, { class: "cell__button", icon: "icon-circle-with-minus" })
+                                    m(Icon, { class: "cell__button", icon: "icon-circle-with-minus", action: e => resetCell(e, ind) })
                                 ]),
                                 m("label.cell__action", [
                                     m("span", "הערה"),
