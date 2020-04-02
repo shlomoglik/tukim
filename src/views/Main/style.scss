@@ -30,6 +30,21 @@
         color: gray;
     }
     &__item {
+        &.hatala{
+            background-image: url("/img/chick-1.png") ;
+        }
+        &.bekia{
+            background-image: url("/img/chick-2.png") ;
+        }
+        &.hafrada{
+            background-image: url("/img/chick-3.png") ;
+        }
+        &.parrot{
+            background-image: url("/img/parrots.gif") ;
+        }
+        background-size: 1em;
+        background-position: top center;
+        background-repeat: no-repeat;
         display: grid;
         align-items: center;
         justify-items: center;

@@ -1,129 +1,43 @@
-[debug] [2020-03-31T11:32:17.096Z] ----------------------------------------------------------------------
-[debug] [2020-03-31T11:32:17.099Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
-[debug] [2020-03-31T11:32:17.099Z] CLI Version:   7.16.1
-[debug] [2020-03-31T11:32:17.099Z] Platform:      win32
-[debug] [2020-03-31T11:32:17.099Z] Node Version:  v10.15.2
-[debug] [2020-03-31T11:32:17.101Z] Time:          Tue Mar 31 2020 14:32:17 GMT+0300 (GMT+03:00)
-[debug] [2020-03-31T11:32:17.101Z] ----------------------------------------------------------------------
-[debug] [2020-03-31T11:32:17.101Z] 
-[debug] [2020-03-31T11:32:17.114Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-03-31T11:32:17.114Z] > authorizing via signed-in user
-[debug] [2020-03-31T11:32:17.114Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
-[debug] [2020-03-31T11:32:17.118Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2020-03-31T11:32:17.118Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+[debug] [2020-04-02T10:33:46.717Z] ----------------------------------------------------------------------
+[debug] [2020-04-02T10:33:46.719Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2020-04-02T10:33:46.720Z] CLI Version:   8.0.0
+[debug] [2020-04-02T10:33:46.720Z] Platform:      win32
+[debug] [2020-04-02T10:33:46.720Z] Node Version:  v10.15.2
+[debug] [2020-04-02T10:33:46.722Z] Time:          Thu Apr 02 2020 13:33:46 GMT+0300 (GMT+03:00)
+[debug] [2020-04-02T10:33:46.722Z] ----------------------------------------------------------------------
+[debug] [2020-04-02T10:33:46.722Z] 
+[debug] [2020-04-02T10:33:46.740Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-02T10:33:46.741Z] > authorizing via signed-in user
+[debug] [2020-04-02T10:33:46.742Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
+[debug] [2020-04-02T10:33:46.745Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-02T10:33:46.745Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
  <request body omitted>
-[debug] [2020-03-31T11:32:21.318Z] <<< HTTP RESPONSE 200
-[debug] [2020-03-31T11:32:21.328Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
-
-[debug] [2020-03-31T11:32:25.581Z] <<< HTTP RESPONSE 200
-[debug] [2020-03-31T11:32:25.583Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
+[debug] [2020-04-02T10:33:47.112Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 02 Apr 2020 10:33:47 GMT","server":"scaffolding on HTTPServer2","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-02T10:33:47.129Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-04-02T10:33:48.188Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 02 Apr 2020 10:33:48 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=718","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-02T10:33:48.189Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
  
-[debug] [2020-03-31T11:32:30.105Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-02T10:33:48.701Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 02 Apr 2020 10:33:49 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
 [info] 
 [info] === Serving from 'C:\Users\User\Desktop\developing\tukim'...
 [info] 
-[debug] [2020-03-31T11:32:30.113Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
+[debug] [2020-04-02T10:33:48.713Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
  
-[warn] !  Your requested "node" version "8" doesn't match your global version "10"
-[info] +  functions: functions emulator started at http://localhost:5001
-[debug] [2020-03-31T11:32:33.187Z] <<< HTTP RESPONSE 200
-[info] i  functions: Watching "C:\Users\User\Desktop\developing\tukim\functions" for Cloud Functions...
-[debug] [2020-03-31T11:32:33.309Z] [worker-pool] addWorker(~diagnostic~)
-[debug] [2020-03-31T11:32:33.310Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
-[debug] [2020-03-31T11:32:33.310Z] [worker-pool] submitWork(triggerId=)
-[debug] [2020-03-31T11:32:33.311Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\6956
-[debug] [2020-03-31T11:32:33.312Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: BUSY
-[info] i  hosting: Serving hosting files from: public
-[info] +  hosting: Local server: http://localhost:5000
-[debug] [2020-03-31T11:32:33.950Z] [runtime-status] [6956] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"}
-[debug] [2020-03-31T11:32:33.952Z] [runtime-status] [6956] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
-[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
-[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
-[debug] [2020-03-31T11:32:33.979Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: exited
-[debug] [2020-03-31T11:32:33.979Z] [worker-~diagnostic~-1f184159-89db-451a-aa36-60aca6b53275]: FINISHED
-[debug] [2020-03-31T14:51:37.568Z] ----------------------------------------------------------------------
-[debug] [2020-03-31T14:51:37.570Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
-[debug] [2020-03-31T14:51:37.571Z] CLI Version:   7.16.1
-[debug] [2020-03-31T14:51:37.571Z] Platform:      win32
-[debug] [2020-03-31T14:51:37.571Z] Node Version:  v10.15.2
-[debug] [2020-03-31T14:51:37.572Z] Time:          Tue Mar 31 2020 17:51:37 GMT+0300 (GMT+03:00)
-[debug] [2020-03-31T14:51:37.572Z] ----------------------------------------------------------------------
-[debug] [2020-03-31T14:51:37.572Z] 
-[debug] [2020-03-31T14:51:37.590Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-03-31T14:51:37.590Z] > authorizing via signed-in user
-[debug] [2020-03-31T14:51:37.590Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
-[debug] [2020-03-31T14:51:37.592Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2020-03-31T14:51:37.592Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
- <request body omitted>
-[debug] [2020-03-31T14:51:37.931Z] <<< HTTP RESPONSE 200
-[debug] [2020-03-31T14:51:37.944Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
-
-[debug] [2020-03-31T14:51:38.415Z] <<< HTTP RESPONSE 200
-[debug] [2020-03-31T14:51:38.418Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
- 
-[debug] [2020-03-31T14:51:38.938Z] <<< HTTP RESPONSE 200
-[info] 
-[info] === Serving from 'C:\Users\User\Desktop\developing\tukim'...
-[info] 
-[debug] [2020-03-31T14:51:38.959Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
- 
-[debug] [2020-03-31T14:51:39.824Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-02T10:33:49.622Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 02 Apr 2020 10:33:50 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
 [info] i  hosting: Serving hosting files from: public
 [info] +  hosting: Local server: http://localhost:5000
 [warn] !  Your requested "node" version "8" doesn't match your global version "10"
 [info] +  functions: functions emulator started at http://localhost:5001
 [info] i  functions: Watching "C:\Users\User\Desktop\developing\tukim\functions" for Cloud Functions...
-[debug] [2020-03-31T14:51:41.064Z] [worker-pool] addWorker(~diagnostic~)
-[debug] [2020-03-31T14:51:41.064Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
-[debug] [2020-03-31T14:51:41.064Z] [worker-pool] submitWork(triggerId=)
-[debug] [2020-03-31T14:51:41.066Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\10136
-[debug] [2020-03-31T14:51:41.069Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: BUSY
-[debug] [2020-03-31T14:51:41.583Z] [runtime-status] [10136] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"}
-[debug] [2020-03-31T14:51:41.586Z] [runtime-status] [10136] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[debug] [2020-04-02T10:33:50.817Z] [worker-pool] addWorker(~diagnostic~) 
+[debug] [2020-04-02T10:33:50.818Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
+[debug] [2020-04-02T10:33:50.819Z] [worker-pool] submitWork(triggerId=) 
+[debug] [2020-04-02T10:33:50.836Z] [worker-~diagnostic~-16454015-ae66-41d0-8dca-4a9ca45e3398]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\2148 
+[debug] [2020-04-02T10:33:50.836Z] [worker-~diagnostic~-16454015-ae66-41d0-8dca-4a9ca45e3398]: BUSY 
+[debug] [2020-04-02T10:33:51.646Z] [runtime-status] [2148] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"} 
+[debug] [2020-04-02T10:33:51.648Z] [runtime-status] [2148] Disabled runtime features: undefined 
 [warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
 [info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
-[debug] [2020-03-31T14:51:41.621Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: exited
-[debug] [2020-03-31T14:51:41.621Z] [worker-~diagnostic~-7e8d2f37-57c6-41f3-9aca-8bab2216329f]: FINISHED
-[debug] [2020-04-01T08:55:22.416Z] ----------------------------------------------------------------------
-[debug] [2020-04-01T08:55:22.420Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
-[debug] [2020-04-01T08:55:22.421Z] CLI Version:   7.16.1
-[debug] [2020-04-01T08:55:22.421Z] Platform:      win32
-[debug] [2020-04-01T08:55:22.421Z] Node Version:  v10.15.2
-[debug] [2020-04-01T08:55:22.424Z] Time:          Wed Apr 01 2020 11:55:22 GMT+0300 (GMT+03:00)
-[debug] [2020-04-01T08:55:22.424Z] ----------------------------------------------------------------------
-[debug] [2020-04-01T08:55:22.425Z] 
-[debug] [2020-04-01T08:55:22.447Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-04-01T08:55:22.447Z] > authorizing via signed-in user
-[debug] [2020-04-01T08:55:22.448Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
-[debug] [2020-04-01T08:55:22.453Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2020-04-01T08:55:22.454Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
- <request body omitted>
-[debug] [2020-04-01T08:55:23.838Z] <<< HTTP RESPONSE 200
-[debug] [2020-04-01T08:55:23.846Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
-
-[debug] [2020-04-01T08:55:24.342Z] <<< HTTP RESPONSE 200
-[debug] [2020-04-01T08:55:24.346Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
- 
-[debug] [2020-04-01T08:55:24.833Z] <<< HTTP RESPONSE 200
-[info] 
-[info] === Serving from 'C:\Users\User\Desktop\developing\tukim'...
-[info] 
-[debug] [2020-04-01T08:55:24.845Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
- 
-[debug] [2020-04-01T08:55:25.754Z] <<< HTTP RESPONSE 200
-[info] i  hosting: Serving hosting files from: public
-[info] +  hosting: Local server: http://localhost:5000
-[warn] !  Your requested "node" version "8" doesn't match your global version "10"
-[info] +  functions: functions emulator started at http://localhost:5001
-[info] i  functions: Watching "C:\Users\User\Desktop\developing\tukim\functions" for Cloud Functions...
-[debug] [2020-04-01T08:55:26.946Z] [worker-pool] addWorker(~diagnostic~)
-[debug] [2020-04-01T08:55:26.946Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
-[debug] [2020-04-01T08:55:26.947Z] [worker-pool] submitWork(triggerId=)
-[debug] [2020-04-01T08:55:26.947Z] [worker-~diagnostic~-e0ee157c-5cfe-4a33-8979-17e2b8ac4585]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\17436
-[debug] [2020-04-01T08:55:26.948Z] [worker-~diagnostic~-e0ee157c-5cfe-4a33-8979-17e2b8ac4585]: BUSY
-[debug] [2020-04-01T08:55:28.601Z] [runtime-status] [17436] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"}
-[debug] [2020-04-01T08:55:28.606Z] [runtime-status] [17436] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
-[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
-[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
-[debug] [2020-04-01T08:55:28.854Z] [worker-~diagnostic~-e0ee157c-5cfe-4a33-8979-17e2b8ac4585]: exited
-[debug] [2020-04-01T08:55:28.854Z] [worker-~diagnostic~-e0ee157c-5cfe-4a33-8979-17e2b8ac4585]: FINISHED
+[debug] [2020-04-02T10:33:51.673Z] [worker-~diagnostic~-16454015-ae66-41d0-8dca-4a9ca45e3398]: exited 
+[debug] [2020-04-02T10:33:51.674Z] [worker-~diagnostic~-16454015-ae66-41d0-8dca-4a9ca45e3398]: FINISHED 

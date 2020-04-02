@@ -11,8 +11,8 @@ import { REQUIRED, MIN, MAX } from "../../js/inputAttrs";
 // Top
 export const Main = node => {
 
-    const DGIRA_DUE = 19;
-    const HAFRADA_DUE = 40;
+    const DGIRA_DUE = 23;
+    const HAFRADA_DUE = 30;
 
     const STATUS = {
         none: "none",
@@ -118,12 +118,12 @@ export const Main = node => {
 
     const model = {
         headers: {
-            "cellIndex": { label: "תא", type: "number", src: "cells/:docID", props: [{ [REQUIRED]: true }] },
-            "cellStatus": { label: "נוכחי", type: "text", src: "cells/:docID" },
-            "hatalaTime": { label: "הטלה", type: "date", src: "cells/:docID", props: [{ [MAX]: dateValue(new Date()) }] },
-            "bekiaTime": { label: "בקיעה", type: "date", src: "cells/:docID/sessions/:sessionID", props: [{ [MAX]: dateValue(new Date()) }] },
-            "hafradaTime": { label: "הפרדה", type: "date", src: "cells/:docID/sessions/:sessionID", props: [{ [MAX]: dateValue(new Date()) }] },
-            "count": { label: "כמות", type: "number", src: "cells/:docID/sessions/:sessionID", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
+            "cellIndex": { label: "תא", type: "number", src: "cells/:docID", class:"" ,  props: [{ [REQUIRED]: true }] },
+            "cellStatus": { label: "נוכחי", type: "text", class:"", src: "cells/:docID" },
+            "hatalaTime": { label: "הטלה", type: "date", src: "cells/:docID",class:"hatala", props: [{ [MAX]: dateValue(new Date()) }] },
+            "bekiaTime": { label: "בקיעה", type: "date", src: "cells/:docID/sessions/:sessionID",class:"bekia", props: [{ [MAX]: dateValue(new Date()) }] },
+            "hafradaTime": { label: "הפרדה", type: "date", src: "cells/:docID/sessions/:sessionID",class:"hafrada", props: [{ [MAX]: dateValue(new Date()) }] },
+            "count": { label: "כמות", type: "number", src: "cells/:docID/sessions/:sessionID",class:"parrot", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
         },
         forms: {
             "items": ["hatalaTime", "bekiaTime", "hafradaTime", "count"]
@@ -165,7 +165,7 @@ export const Main = node => {
                             model.forms.items.map(headerKey => {
                                 const field = model.headers[headerKey];
                                 const isWarning = getWarning(doc, ind, headerKey);
-                                return m(".cell__item",
+                                return m(".cell__item", { class: field.class },
                                     m(".cell__caption", { onclick: e => setDefaultValue(ind, headerKey) }, field.label),
                                     isWarning ? m(Icon, { class: "cell__mark", icon: "icon-warning" }) : null,
                                     isEdit(ind, headerKey) ?
