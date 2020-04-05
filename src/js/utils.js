@@ -21,7 +21,11 @@ export const formatDateDisplay = (date, displayType) => {
             case 2: return "+יומיים"
             case -1: return "אתמול"
             case -2: return "שלשום"
-            default: return `${dist} ימים`
+        }
+        if(dist<0){
+            return `לפני ${absDist} ימים`
+        }else{
+            return `${dist} ימים`
         }
     } else {
         let output = ""

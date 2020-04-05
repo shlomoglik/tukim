@@ -25,6 +25,23 @@ export const Main = node => {
         archive: "archive"
     }
 
+    const MENU_ITEMS = [
+        { label: "הוסף" },
+        { label: "מחק", isSelection: true },
+        { label: "אפס", isSelection: true },
+    ]
+
+    const POP_UP = {
+        "note": {
+            title: "הוספת הערה",
+            content: "הוסף הערה לתא ${cellIndex}"
+        },
+        "resetOne": {
+            title: "איפוס תא",
+            content: "האם אתה בטוח כי ברצונך לאפס את תא ${cellIndex} ?"
+        }
+    }
+
 
     const toggleEdit = (e, ind, key) => {
         e.stopPropagation();
@@ -58,10 +75,21 @@ export const Main = node => {
         }
     }
 
-    const resetEdit = e => {
+    const isSelectedCell = ind => node.state.selected.find(el => el.cellIndex === model.data[ind].cellIndex)
+
+    const toggleSelect = (e, ind) => {
         e.stopPropagation();
-        node.state.editValue = { ind: -1, key: "" }
+        resetEdit();
+        const cellIndex = model.data[ind].cellIndex
+        const existInd = node.state.selected.findIndex(el => el.cellIndex === cellIndex);
+        if (existInd > -1) {
+            node.state.selected.splice(existInd, 1)
+        } else {
+            node.state.selected = [{ cellIndex }, ...node.state.selected]
+        }
     }
+
+    const resetEdit = () => node.state.editValue = { ind: -1, key: "" }
 
     const getValue = (val, type) => {
         // if (!val) return ""
@@ -73,16 +101,32 @@ export const Main = node => {
         }
     }
     const getDisplayValue = (val, type) => {
+        let displayValue = ""
+        let isEmpty = true;
         switch (type) {
             case "date":
-                return val ? formatDateDisplay(new Date(val)) : "--ללא--"
+                if (val) {
+                    displayValue = formatDateDisplay(new Date(val))
+                    isEmpty = false
+                }
+                else displayValue = "--ללא--"
+                break;
             case "number":
-                return val ? Number(val) : 0
+                if (val) {
+                    displayValue = Number(val);
+                    isEmpty = false
+                }
+                else displayValue = 0
+                break;
             case "text":
-                return val || ""
+                if (val) displayValue = val
+                else isEmpty = false
+                break;
             default:
-                return val || ""
+                if (val) displayValue = val
+                else isEmpty = false
         }
+        return { displayValue, isEmpty }
     }
 
     const isEdit = (ind, key) => ind === node.state.editValue.ind && key === node.state.editValue.key
@@ -109,6 +153,20 @@ export const Main = node => {
         return false;
     }
 
+    const openPopUp = (e, ind, type = "note") => {
+        const title = POP_UP[type].title;
+        let content = POP_UP[type].content;
+        switch (type) {
+            case "note":
+                content = content.replace("${cellIndex}", model.data[ind].cellIndex);
+                break;
+            case "resetOne":
+                content = content.replace("${cellIndex}", model.data[ind].cellIndex);
+                break;
+        }
+        node.state.popUp = { content, type, title, ind }
+    }
+
     const resetCell = (e, ind) => {
         model.data[ind].hatalaTime = "";
         model.data[ind].bekiaTime = "";
@@ -116,14 +174,16 @@ export const Main = node => {
         model.data[ind].count = 0;
     }
 
+
+
     const model = {
         headers: {
-            "cellIndex": { label: "תא", type: "number", src: "cells/:docID", class:"" ,  props: [{ [REQUIRED]: true }] },
-            "cellStatus": { label: "נוכחי", type: "text", class:"", src: "cells/:docID" },
-            "hatalaTime": { label: "הטלה", type: "date", src: "cells/:docID",class:"hatala", props: [{ [MAX]: dateValue(new Date()) }] },
-            "bekiaTime": { label: "בקיעה", type: "date", src: "cells/:docID/sessions/:sessionID",class:"bekia", props: [{ [MAX]: dateValue(new Date()) }] },
-            "hafradaTime": { label: "הפרדה", type: "date", src: "cells/:docID/sessions/:sessionID",class:"hafrada", props: [{ [MAX]: dateValue(new Date()) }] },
-            "count": { label: "כמות", type: "number", src: "cells/:docID/sessions/:sessionID",class:"parrot", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
+            "cellIndex": { label: "תא", type: "number", src: "cells/:docID", class: "", props: [{ [REQUIRED]: true }] },
+            "cellStatus": { label: "נוכחי", type: "text", class: "", src: "cells/:docID" },
+            "hatalaTime": { label: "הטלה", type: "date", src: "cells/:docID", class: "hatala", props: [{ [MAX]: dateValue(new Date()) }] },
+            "bekiaTime": { label: "בקיעה", type: "date", src: "cells/:docID/sessions/:sessionID", class: "bekia", props: [{ [MAX]: dateValue(new Date()) }] },
+            "hafradaTime": { label: "הפרדה", type: "date", src: "cells/:docID/sessions/:sessionID", class: "hafrada", props: [{ [MAX]: dateValue(new Date()) }] },
+            "count": { label: "כמות", type: "number", src: "cells/:docID/sessions/:sessionID", class: "parrot", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
         },
         forms: {
             "items": ["hatalaTime", "bekiaTime", "hafradaTime", "count"]
@@ -155,16 +215,34 @@ export const Main = node => {
     }
     return {
         editValue: { ind: -1, key: "" },
+        menuOpen: false,
+        selected: [],
+        popUp: false,
         view: vnode => {
             return m(".mainPage",
+                vnode.state.popUp !== false &&
+                m(".popUp", { onclick: e => vnode.state.popUp = false },
+                    m(".popUp__box", { onclick: e => e.stopPropagation() },
+                        m(".popUp__title", vnode.state.popUp.title),
+                        m(".popUp__msg", vnode.state.popUp.content),
+                        vnode.state.popUp.type === "note" && m("textarea.popUp__input [placeholder='הוסף הערה...']")
+                    )
+                ),
                 m("img.logo", { src: "./img/logo.png" }),
                 m(".content", [
                     model.data.map((doc, ind) => {
-                        return m(".cell", [
-                            m(".cell__index", { onclick: e => resetEdit(e) }, doc.cellIndex),
+                        const isSelected = isSelectedCell(ind)
+                        return m(".cell", { class: isSelected ? "cell--selected" : "" }, [
+                            m(".cell__index", {
+                                onclick: e => toggleSelect(e, ind),
+                                class: isSelected ? "cell__index--selected" : ""
+                            },
+                                doc.cellIndex
+                            ),
                             model.forms.items.map(headerKey => {
                                 const field = model.headers[headerKey];
                                 const isWarning = getWarning(doc, ind, headerKey);
+                                const { displayValue, isEmpty } = getDisplayValue(doc[headerKey], field.type);
                                 return m(".cell__item", { class: field.class },
                                     m(".cell__caption", { onclick: e => setDefaultValue(ind, headerKey) }, field.label),
                                     isWarning ? m(Icon, { class: "cell__mark", icon: "icon-warning" }) : null,
@@ -174,7 +252,9 @@ export const Main = node => {
                                             oninput: e => editValue(e, ind, headerKey),
                                             oncreate: el => setPropetiesToComponent(el, field.props)
                                         }) :
-                                        m(".cell__value", { onclick: e => toggleEdit(e, ind, headerKey) }, getDisplayValue(doc[headerKey], field.type))
+                                        m(`.cell__value [data-empty=${isEmpty}]`, { onclick: e => toggleEdit(e, ind, headerKey) },
+                                            displayValue
+                                        )
                                 )
                             }),
                             m(".cell__buttons", [
@@ -184,12 +264,30 @@ export const Main = node => {
                                 ]),
                                 m("label.cell__action", [
                                     m("span", "הערה"),
-                                    m(Icon, { class: "cell__button", icon: "icon-chat" })
+                                    m(Icon, { class: "cell__button", icon: "icon-chat", action: e => openPopUp(e, ind, "note") })
                                 ]),
                             ])
                         ])
-                    })
-                ])
+                    }),
+                ]),
+                m(".menu",
+                    vnode.state.menuOpen && m(".menu__list",
+                        MENU_ITEMS.map(menuItem => {
+                            if (menuItem.isSelection) {
+                                const selectedLength = vnode.state.selected.length;
+                                return selectedLength > 0 && m(".menu__item", [menuItem.label, m("span.menu__item-count", selectedLength)])
+                            } else {
+                                return m(".menu__item", menuItem.label)
+                            }
+                        })
+                    ),
+                    m(".menu__button", {
+                        onclick: e => vnode.state.menuOpen = !vnode.state.menuOpen,
+                    },
+                        m(Icon, { icon: vnode.state.menuOpen ? "icon-x" : "icon-menu" })
+                    ),
+                    (vnode.state.selected.length > 0 && !vnode.state.menuOpen) ? m("span.menu__item-count menu--count", vnode.state.selected.length) : null
+                )
             )
         }
     }
