@@ -14,21 +14,28 @@ export const formatDateDisplay = (date, displayType) => {
     const today = new Date();
     const dist = distDays(today, date);
     const absDist = Math.abs(dist)
+    let output = ""
     if (absDist < 7) {
-        if (absDist === 0) return "היום"
-        switch (dist) {
-            case 1: return "מחר"
-            case 2: return "+יומיים"
-            case -1: return "אתמול"
-            case -2: return "שלשום"
-        }
-        if(dist<0){
-            return `לפני ${absDist} ימים`
-        }else{
-            return `${dist} ימים`
+        if (absDist === 0) output = "היום"
+        else {
+            switch (dist) {
+                case 1: output = "מחר"
+                    break;
+                case 2: output = "+יומיים"
+                    break;
+                case -1: output = "אתמול"
+                    break;
+                case -2: output = "שלשום"
+                    break;
+                default:
+                    if (dist < 0) {
+                        output = `לפני ${absDist} ימים`
+                    } else {
+                        output = `${dist} ימים`
+                    }
+            }
         }
     } else {
-        let output = ""
         if (displayType === "datesOnly") {
             output += d + "/" + m + "/" + y.toString().substring(2);
         } else if (displayType === "weeks") {
@@ -44,7 +51,39 @@ export const formatDateDisplay = (date, displayType) => {
             else output += "עוד "
             output += `${absDist} יום`
         }
-        return output;
+    }
+    if (displayType === "useHours") {
+        const h = date.getHours();
+        const mm = date.getMinutes();
+        output += ` ${h}:${mm}`
+    }
+    return output;
+}
+
+export const sortBy = (param, order, type) => {
+    const myOrder = order || 'asc'
+    if (myOrder === 'desc') {
+        if (param) return (a, b) => {
+            let paramA = a[param];
+            let paramB = b[param];
+            if (type === "date") {
+                paramA = +new Date(paramA)
+                paramB = +new Date(paramB)
+            }
+            return paramB - paramA
+        }
+        else return (a, b) => b - a
+    } else {
+        if (param) return (a, b) => {
+            let paramA = a[param];
+            let paramB = b[param];
+            if (type === "date") {
+                paramA = +new Date(paramA)
+                paramB = +new Date(paramB)
+            }
+            return paramA - paramB
+        }
+        else return (a, b) => a - b
     }
 }
 
@@ -94,7 +133,6 @@ export const validateInput = (field, value, doc) => {
                 case MAX:
                     if (field.type === "date") {
                         const dist = distDays(new Date(value), v)
-                        console.log(dist)
                         if (dist > 0) {
                             valid = false;
                             errorMsgs.push(`תאריך אחרי ${v}`)
@@ -145,7 +183,7 @@ export const validateInput = (field, value, doc) => {
         })
     }
     // [2] - logic validation
-    console.log(doc)
+    // console.log(doc)
 
     return { valid, errorMsgs }
 }

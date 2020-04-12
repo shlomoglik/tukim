@@ -14,7 +14,7 @@ export const Login = node => {
             const userCred = await auth.signInWithEmailAndPassword(user.email, user.password);
             alert(`ברוך הבא ${userCred.user.displayName || userCred.user.email}`)
             m.route.set("/");
-            // stay logged in using localStorage
+            // TODO: stay logged in using localStorage
         } catch (err) {
             if (err.code) {
                 switch (err.code) {
@@ -38,13 +38,13 @@ export const Login = node => {
                 m("label.login__input",
                     [
                         m("span.login__label", "אימייל"),
-                        m("input.login__field[type=email]", { value: user.email, oninput: e => user.email = e.target.value })
+                        m("input#email.login__field[type=email][name='email'][autocomplete='on']", { value: user.email, oninput: e => user.email = e.target.value })
                     ]
                 ),
                 m("label.login__input",
                     [
                         m("span.login__label", "סיסמא"),
-                        m("input.login__field[type=password]", { value: user.password, oninput: e => user.password = e.target.value }),
+                        m("input#password.login__field[type=password][name='password'][autocomplete='on']", { value: user.password, oninput: e => user.password = e.target.value }),
                     ]
                 ),
                 m("button.login__button button", { onclick: e => loginUser() }, "התחבר")
