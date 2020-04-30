@@ -3,6 +3,7 @@ import { auth, db } from "../../index";
 import m from "mithril"
 
 export const insertNote = (sourceModel, note, docID) => {
+    if (note.trim() === "") return
     console.time('⏲ insertNote')
     const collectionPath = getCollectionPath(sourceModel.meta.routes.collection)
     const path = `${collectionPath}/${docID}/notes`;
@@ -11,7 +12,7 @@ export const insertNote = (sourceModel, note, docID) => {
         createdAt: new Date().toISOString(),
         createdBy: auth.currentUser.uid
     })
-    .then(() => console.timeEnd('⏲ insertNote'))
-    .catch(err => alert(err))
-    .finally(() => m.redraw())
+        .then(() => console.timeEnd('⏲ insertNote'))
+        .catch(err => alert(err))
+        .finally(() => m.redraw())
 }

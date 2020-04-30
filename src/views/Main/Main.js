@@ -13,12 +13,18 @@ import { resetCell, resetManyCells } from "../../data/set/resetCell";
 import { insertNewCell, insertMenyCells } from "../../data/set/insertCell";
 import { deleteCells } from "../../data/set/deleteCell";
 import { insertNote } from "../../data/set/insertNote";
+import { deleteOne } from "../../data/set/deleteOne";
 
 // TODO:
 // filters
 // views
 // Top
 export const Main = node => {
+
+
+    // ======================
+    //      DATA:
+    // ======================
 
     const DGIRA_DUE = 23;
     const HAFRADA_DUE = 30;
@@ -71,6 +77,32 @@ export const Main = node => {
             content: "האם לאפס ${count} תאים?"
         }
     }
+
+
+
+    const model = {
+        headers: {
+            "cellIndex": { label: "תא", type: "number", class: "", props: [{ [REQUIRED]: true }] },
+            "cellStatus": { label: "נוכחי", type: "text", class: "" },
+            "hatalaTime": { label: "הטלה", type: "date", class: "hatala", props: [{ [MAX]: dateValue(new Date()) }] },
+            "bekiaTime": { label: "בקיעה", type: "date", class: "bekia", props: [{ [MAX]: dateValue(new Date()) }] },
+            "hafradaTime": { label: "הפרדה", type: "date", class: "hafrada", props: [{ [MAX]: dateValue(new Date()) }] },
+            "count": { label: "כמות", type: "number", class: "parrot", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
+        },
+        forms: {
+            "items": ["hatalaTime", "bekiaTime", "hafradaTime", "count"]
+        },
+        meta: {
+            routes: {
+                collection: "cells"
+            },
+        },
+        data: [],
+    }
+
+    // ======================
+    //      FUNCTIONS:
+    // ======================
 
     function toggleEdit(e, ind, key) {
         e.stopPropagation();
@@ -163,9 +195,40 @@ export const Main = node => {
 
     const isEdit = (ind, key) => ind === node.state.editValue.ind && key === node.state.editValue.key
 
+
+    // const getWarningObj = (doc) => {
+    //     let hatalaTime, bekiaTime, hafradaTime;
+
+    //     // hatalaTime
+    //     if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") {
+    //         hatalaTime = true;
+    //     } else {
+    //         // bekiaTime
+    //         if (doc.hatalaTime !== "") {
+    //             const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+    //             if (doc.bekiaTime === "" && distFromHatala > (DGIRA_DUE - 5))
+    //                 bekiaTime = true;
+    //         }
+
+    //         // hafradaTime
+    //         if (doc.bekiaTime !== "") {
+    //             const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
+    //             if (doc.hafradaTime === "" && distFromBekia > (HAFRADA_DUE - 5))
+    //                 hafradaTime = true;
+    //             if (doc.hatalaTime !== "") {
+    //                 const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+    //                 if (doc.hafradaTime === "" && distFromHatala > (DGIRA_DUE + HAFRADA_DUE - 5))
+    //                     hafradaTime = true;
+    //             }
+    //         }
+    //     }
+
+    //     return { hatalaTime, bekiaTime, hafradaTime }
+    // }
+
     const getWarning = (doc, ind, headerKey) => {
         if (headerKey === "hatalaTime") {
-            if (doc[headerKey] === "") return true
+            if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") return true
         } else if (headerKey === "bekiaTime") {
             const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
             if (doc.hatalaTime !== "" &&
@@ -186,11 +249,19 @@ export const Main = node => {
     }
 
     const openPopUp = (e, ind, type = "note") => {
+        if (!type) return
         const title = POP_UP[type].title;
         let input = {};
         let content = POP_UP[type].content;
         let action = () => null
         switch (type) {
+            case "resetOne":
+                content = content.replace("${cellIndex}", model.data[ind].cellIndex);
+                action = e => {
+                    Promise.resolve(resetCell(model, model.data[ind].docID))
+                        .then(() => closePopUp())
+                }
+                break;
             case "note":
                 const docID = model.data[ind].docID
                 input.note = "";
@@ -236,25 +307,10 @@ export const Main = node => {
         m.redraw()
     }
 
-
-    const model = {
-        headers: {
-            "cellIndex": { label: "תא", type: "number", class: "", props: [{ [REQUIRED]: true }] },
-            "cellStatus": { label: "נוכחי", type: "text", class: "" },
-            "hatalaTime": { label: "הטלה", type: "date", class: "hatala", props: [{ [MAX]: dateValue(new Date()) }] },
-            "bekiaTime": { label: "בקיעה", type: "date", class: "bekia", props: [{ [MAX]: dateValue(new Date()) }] },
-            "hafradaTime": { label: "הפרדה", type: "date", class: "hafrada", props: [{ [MAX]: dateValue(new Date()) }] },
-            "count": { label: "כמות", type: "number", class: "parrot", props: [{ [REQUIRED]: true }, { [MIN]: 0 }, { [MAX]: 8 }] },
-        },
-        forms: {
-            "items": ["hatalaTime", "bekiaTime", "hafradaTime", "count"]
-        },
-        meta: {
-            routes: {
-                collection: "cells"
-            },
-        },
-        data: [],
+    const setRangeTarget = e => {
+        const targetCell = e.target.value
+        document.getElementById(`cell${targetCell}`).scrollIntoView();
+        m.route.set(m.route.get(), { focusOn: `cell${targetCell}` })
     }
     return {
         editValue: { ind: -1, key: "" },
@@ -276,10 +332,11 @@ export const Main = node => {
                             oninput: e => setPopUpInput(e, "note")
                         }),
                         vnode.state.popUp.type === "note" && m(".popUp__notes", [
-                            vnode.state.popUp.input.notes.sort(sortBy("createdAt", "desc","date")).map((doc, ind) => {
+                            vnode.state.popUp.input.notes.sort(sortBy("createdAt", "desc", "date")).map((doc, ind) => {
                                 return m(".popUp__note", { key: doc.docID }, [
                                     m("span.popUp__note-time", `${formatDateDisplay(new Date(doc.createdAt), "useHours")} - `),
                                     m("span.popUp__note-text", doc.note),
+                                    m(Icon, { icon: "icon-trash", action: e => deleteOne(`cells/${model.data[vnode.state.popUp.ind].docID}/notes/${doc.docID}`) }),
                                 ])
                             })
                         ]),
@@ -291,10 +348,21 @@ export const Main = node => {
                     )
                 ),
                 m("img.logo", { src: "./img/logo.png" }),
+                // m("form.filter", [
+                //     m(".filter__input", [
+                //         // m(`input.filter__text[type=range]`, { min: 1, max: model.data.length, oninput: e => setRangeTarget(e) }),
+                //         // vnode.state.selected.length > 0 && model.data.map((doc, ind) => {
+                //         //     const isSelected = isSelectedCell(ind)
+                //         //     return m(`.filter__cell  ${isSelected ? "[data-selected=true]" : ""}`, doc.cellIndex)
+                //         // })
+                //     ])
+                // ]),
                 m(".content", [
                     model.data.map((doc, ind) => {
-                        const isSelected = isSelectedCell(ind)
-                        return m(".cell", { class: isSelected ? "cell--selected" : "" }, [
+                        const isSelected = isSelectedCell(ind);
+                        // const { hatalaTime, bekiaTime, hafradaTime } = getWarningObj(doc);
+                        // console.log(`index: #${doc.cellIndex} \n`, hatalaTime, bekiaTime, hafradaTime)
+                        return m(`.cell#cell${doc.cellIndex}`, { class: isSelected ? "cell--selected" : "" }, [
                             m(".cell__index", {
                                 onclick: e => toggleSelect(e, ind),
                                 class: isSelected ? "cell__index--selected" : ""
@@ -322,11 +390,12 @@ export const Main = node => {
                             m(".cell__buttons", [
                                 m("label.cell__action", [
                                     m("span", "אפס"),
-                                    m(Icon, { class: "cell__button", icon: "icon-circle-with-minus", action: e => resetCell(model, model.data[ind].docID) })
+                                    m(Icon, { class: "cell__button", icon: "icon-circle-with-minus", action: e => openPopUp(e, ind, "resetOne") })
                                 ]),
                                 m("label.cell__action", [
                                     m("span", "הערה"),
-                                    m(Icon, { class: "cell__button", icon: "icon-chat", action: e => openPopUp(e, ind, "note") })
+                                    m(Icon, { class: "cell__button", icon: "icon-chat", action: e => openPopUp(e, ind, "note") }),
+                                    doc.countNotes > 0 && m(".counter", doc.countNotes)
                                 ]),
                             ])
                         ])

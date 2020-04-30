@@ -10,6 +10,12 @@ export const getCells = (dataSource) => {
                 docID: doc.id
             })
             const index = dataSource.findIndex((elem) => elem.docID === docData.docID)
+
+            doc.ref.collection("notes").onSnapshot(snap => {
+                docData.countNotes = snap.size;
+                m.redraw()
+            })
+
             if (change.type === "added" || change.type === "modified") {
                 if (index !== -1) dataSource[index] = docData
                 else dataSource.push(docData)
