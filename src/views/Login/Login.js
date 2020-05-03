@@ -2,6 +2,7 @@ import m from "mithril";
 
 import "./style.scss";
 import { auth } from "../../index";
+import { Loader } from "../loader/Loader";
 
 export const Login = node => {
     const user = {
@@ -32,24 +33,36 @@ export const Login = node => {
     }
 
     return {
+        loading: true,
+        oninit: vnode => {
+            Promise.resolve(setTimeout(() => {
+                if (auth.currentUser !== null) m.route.set("/")
+            }, 1500))
+                .finally(() => {
+                    m.redraw()
+                    vnode.state.loading = false;
+                })
+        },
         view: vnode => {
-            return m("form.login", { onsubmit: e => e.preventDefault() }, [
-                m("img.logo", { src: "./img/logo.png" }),
-                m(".login__heading", "התחברות"),
-                m("label.login__input",
-                    [
-                        m("span.login__label", "אימייל"),
-                        m("input#email.login__field[type=email][name='email'][autocomplete='username']", { value: user.email, oninput: e => user.email = e.target.value })
-                    ]
-                ),
-                m("label.login__input",
-                    [
-                        m("span.login__label", "סיסמא"),
-                        m("input#password.login__field[type=password][name='password'][autocomplete='current-password']", { value: user.password, oninput: e => user.password = e.target.value }),
-                    ]
-                ),
-                m("button.login__button button", { onclick: e => loginUser() }, "התחבר")
-            ])
+            return vnode.state.loading ?
+                m(Loader) :
+                m("form.login", { onsubmit: e => e.preventDefault() }, [
+                    m("img.logo", { src: "./img/logo.png" }),
+                    m(".login__heading", "התחברות"),
+                    m("label.login__input",
+                        [
+                            m("span.login__label", "אימייל"),
+                            m("input#email.login__field[type=email][name='email'][autocomplete='username']", { value: user.email, oninput: e => user.email = e.target.value })
+                        ]
+                    ),
+                    m("label.login__input",
+                        [
+                            m("span.login__label", "סיסמא"),
+                            m("input#password.login__field[type=password][name='password'][autocomplete='current-password']", { value: user.password, oninput: e => user.password = e.target.value }),
+                        ]
+                    ),
+                    m("button.login__button button", { onclick: e => loginUser(e) }, "התחבר")
+                ])
         }
     }
 }
