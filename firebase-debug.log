@@ -1,0 +1,43 @@
+[debug] [2020-05-11T04:42:52.706Z] ----------------------------------------------------------------------
+[debug] [2020-05-11T04:42:52.710Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2020-05-11T04:42:52.711Z] CLI Version:   8.0.1
+[debug] [2020-05-11T04:42:52.711Z] Platform:      win32
+[debug] [2020-05-11T04:42:52.711Z] Node Version:  v10.15.2
+[debug] [2020-05-11T04:42:52.715Z] Time:          Mon May 11 2020 07:42:52 GMT+0300 (GMT+03:00)
+[debug] [2020-05-11T04:42:52.715Z] ----------------------------------------------------------------------
+[debug] [2020-05-11T04:42:52.715Z] 
+[debug] [2020-05-11T04:42:52.744Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-11T04:42:52.745Z] > authorizing via signed-in user
+[debug] [2020-05-11T04:42:52.745Z] [iam] checking project tukim-app for permissions ["firebase.projects.get"]
+[debug] [2020-05-11T04:42:52.752Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-05-11T04:42:52.753Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-05-11T04:42:53.363Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Mon, 11 May 2020 04:42:55 GMT","server":"scaffolding on HTTPServer2","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-11T04:42:53.374Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/tukim-app:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-05-11T04:42:54.818Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Mon, 11 May 2020 04:42:56 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=790","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-05-11T04:42:54.819Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app  
+ 
+[debug] [2020-05-11T04:42:56.280Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Mon, 11 May 2020 04:42:58 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Serving from 'C:\Users\User\Desktop\developing\tukim'...
+[info] 
+[debug] [2020-05-11T04:42:56.286Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/tukim-app/webApps/-/config  
+ 
+[debug] [2020-05-11T04:42:57.295Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Mon, 11 May 2020 04:42:59 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "10"
+[info] +  functions: functions emulator started at http://localhost:5001
+[info] i  functions: Watching "C:\Users\User\Desktop\developing\tukim\functions" for Cloud Functions...
+[debug] [2020-05-11T04:42:58.373Z] [worker-pool] addWorker(~diagnostic~) 
+[debug] [2020-05-11T04:42:58.374Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
+[debug] [2020-05-11T04:42:58.374Z] [worker-pool] submitWork(triggerId=) 
+[debug] [2020-05-11T04:42:58.375Z] [worker-~diagnostic~-453cec1d-dc76-409f-946c-ee5c17f4c487]: Assigning socketPath: \\?\pipe\C:\Users\User\Desktop\developing\tukim\functions\18064 
+[debug] [2020-05-11T04:42:58.376Z] [worker-~diagnostic~-453cec1d-dc76-409f-946c-ee5c17f4c487]: BUSY 
+[debug] [2020-05-11T04:42:59.128Z] [runtime-status] [18064] Functions runtime initialized. {"cwd":"C:\\Users\\User\\Desktop\\developing\\tukim\\functions","node_version":"10.15.2"} 
+[debug] [2020-05-11T04:42:59.130Z] [runtime-status] [18064] Disabled runtime features: undefined 
+[warn] !  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2020-05-11T04:42:59.171Z] [worker-~diagnostic~-453cec1d-dc76-409f-946c-ee5c17f4c487]: exited 
+[debug] [2020-05-11T04:42:59.171Z] [worker-~diagnostic~-453cec1d-dc76-409f-946c-ee5c17f4c487]: FINISHED 

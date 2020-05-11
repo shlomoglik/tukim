@@ -6,21 +6,8 @@
 }
 
 .filter {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    justify-self: center;
-    align-self: center;
-    width: 100vh;
-    display: grid;
-    justify-content: center;
-    transition: all 0.2s ease-in;
-    height: 3rem;
-    cursor: pointer;
     &__input {
         display: flex;
-        overflow-x: scroll;
-        height: 5rem;
     }
     &__cell {
         margin: 0.5rem;
@@ -36,6 +23,16 @@
             background: var(--color-bg-dark-1);
             color: var(--color-white);
         }
+    }
+    &__opt{
+        &:not(:last-child){
+            margin-left: 1rem;
+        }
+
+        background-color: lightgray;
+        padding: 1rem;
+        font-size: 1.8rem;
+        border-radius: .5rem;
     }
     // &:hover &__input{
     //     visibility: visible;

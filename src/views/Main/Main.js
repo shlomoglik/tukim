@@ -46,6 +46,10 @@ export const Main = node => {
             action: (e) => openPopUp(e, null, "insert")
         },
         {
+            label: "פילטרים",
+            action: (e) => openPopUp(e, null, "filterCells")
+        },
+        {
             label: "מחק", isSelection: true,
             action: (e) => openPopUp(e, null, "deleteMany")
         },
@@ -53,6 +57,18 @@ export const Main = node => {
             label: "אפס", isSelection: true,
             action: (e) => openPopUp(e, null, "resetMany")
         },
+    ]
+
+    const FILTER_WARNING = [
+        {
+            id: "none",
+            label: "ללא אזהרה",
+            action: e => null
+        }, {
+            id: "bekia",
+            label: "אזהרת בקיעה",
+            action: e => null
+        }
     ]
 
     const POP_UP = {
@@ -75,6 +91,9 @@ export const Main = node => {
         "resetMany": {
             title: "הוספת תא",
             content: "האם לאפס ${count} תאים?"
+        },
+        "filterCells": {
+            title: "פילטרים",
         }
     }
 
@@ -196,57 +215,64 @@ export const Main = node => {
     const isEdit = (ind, key) => ind === node.state.editValue.ind && key === node.state.editValue.key
 
 
-    // const getWarningObj = (doc) => {
-    //     let hatalaTime, bekiaTime, hafradaTime;
-
-    //     // hatalaTime
-    //     if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") {
-    //         hatalaTime = true;
-    //     } else {
-    //         // bekiaTime
-    //         if (doc.hatalaTime !== "") {
-    //             const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
-    //             if (doc.bekiaTime === "" && distFromHatala > (DGIRA_DUE - 5))
-    //                 bekiaTime = true;
-    //         }
-
-    //         // hafradaTime
-    //         if (doc.bekiaTime !== "") {
-    //             const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
-    //             if (doc.hafradaTime === "" && distFromBekia > (HAFRADA_DUE - 5))
-    //                 hafradaTime = true;
-    //             if (doc.hatalaTime !== "") {
-    //                 const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
-    //                 if (doc.hafradaTime === "" && distFromHatala > (DGIRA_DUE + HAFRADA_DUE - 5))
-    //                     hafradaTime = true;
-    //             }
-    //         }
-    //     }
-
-    //     return { hatalaTime, bekiaTime, hafradaTime }
-    // }
-
-    const getWarning = (doc, ind, headerKey) => {
-        if (headerKey === "hatalaTime") {
-            if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") return true
-        } else if (headerKey === "bekiaTime") {
-            const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
-            if (doc.hatalaTime !== "" &&
-                // doc.bekiaStatus !== STATUS.verifired &&
-                doc.bekiaTime === "" &&
-                distFromHatala > (DGIRA_DUE - 5)
-            )
-                return true
-        } else if (headerKey === "hafradaTime") {
-            const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
-            if (doc.bekiaTime !== "" &&
-                doc.hafradaTime === "" &&
-                distFromBekia > (HAFRADA_DUE - 5)
-            )
-                return true;
+    const getWarningObj = (doc) => {
+        let warningObj = {
+            hatalaTime: false,
+            bekiaTime: false,
+            hafradaTime: false
         }
-        return false;
+
+        // hatalaTime
+        if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") {
+            // console.log("ALL EMPTY - set hatala to true")
+            warningObj.hatalaTime = true;
+        } else {
+            // bekiaTime
+            if (doc.hatalaTime !== "") {
+                // console.log("BEKIA TIME - if dist from hatala gt dgira_due set bekia to true")
+                const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+                if (doc.bekiaTime === "" && distFromHatala > (DGIRA_DUE - 5))
+                    warningObj.bekiaTime = true;
+            }
+
+            // hafradaTime
+            if (doc.bekiaTime !== "") {
+                const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
+                if (doc.hafradaTime === "" && distFromBekia > (HAFRADA_DUE - 5))
+                    warningObj.hafradaTime = true;
+                if (doc.hatalaTime !== "") {
+                    const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+                    if (doc.hafradaTime === "" && distFromHatala > (DGIRA_DUE + HAFRADA_DUE - 5))
+                        warningObj.hafradaTime = true;
+                }
+            }
+        }
+        // console.log(`index: #${doc.cellIndex} \n`, hatalaTime, bekiaTime, hafradaTime)
+
+        return warningObj
     }
+
+    // const getWarning = (doc, ind, headerKey) => {
+    //     if (headerKey === "hatalaTime") {
+    //         if (doc.hatalaTime === "" && doc.bekiaTime === "" && doc.hafradaTime === "") return true
+    //     } else if (headerKey === "bekiaTime") {
+    //         const distFromHatala = distDays(new Date(doc.hatalaTime), new Date())
+    //         if (doc.hatalaTime !== "" &&
+    //             // doc.bekiaStatus !== STATUS.verifired &&
+    //             doc.bekiaTime === "" &&
+    //             distFromHatala > (DGIRA_DUE - 5)
+    //         )
+    //             return true
+    //     } else if (headerKey === "hafradaTime") {
+    //         const distFromBekia = distDays(new Date(doc.bekiaTime), new Date())
+    //         if (doc.bekiaTime !== "" &&
+    //             doc.hafradaTime === "" &&
+    //             distFromBekia > (HAFRADA_DUE - 5)
+    //         )
+    //             return true;
+    //     }
+    //     return false;
+    // }
 
     const openPopUp = (e, ind, type = "note") => {
         if (!type) return
@@ -294,9 +320,13 @@ export const Main = node => {
                         .then(() => closePopUp())
                 }
                 break;
+            case "filterCells":
+                action = e => null
+                break;
         }
         node.state.popUp = { content, type, title, ind, action, input }
     }
+
     const setPopUpInput = (e, key) => {
         node.state.popUp.input[key] = e.target.value
     }
@@ -315,6 +345,10 @@ export const Main = node => {
     return {
         editValue: { ind: -1, key: "" },
         menuOpen: false,
+        filters: {
+            cells: [],
+            warning: []
+        },
         selected: [],
         popUp: false,
         oninit: vnode => {
@@ -344,24 +378,28 @@ export const Main = node => {
                             value: vnode.state.popUp.input.count,
                             oninput: e => setPopUpInput(e, "count")
                         }),
+                        vnode.state.popUp.type === "filterCells" && m(".filter", [
+                            m(".filter__input", [
+                                m(`input.filter__text[type=range]`, { min: 1, max: model.data.length, oninput: e => setRangeTarget(e) }),
+                            ]),
+                            // m(".filter__input",
+                            //     model.data.map((doc, ind) => {
+                            //         const isSelected = isSelectedCell(ind)
+                            //         return m(`.filter__cell  ${isSelected ? "[data-selected=true]" : ""}`, { onclick: e => toggleSelect(e, ind) }, doc.cellIndex)
+                            //     })
+                            // ),
+                            m(".filter__input",
+                                FILTER_WARNING.map(opt => m(".filter__opt", { onclick: e => vnode.state.filters.warning.push(opt.id) }, opt.label))
+                            )
+                        ]),
                         m("button.button popUp__action", { onclick: e => vnode.state.popUp.action(e) }, "אשר")
                     )
                 ),
                 m("img.logo", { src: "./img/logo.png" }),
-                // m("form.filter", [
-                //     m(".filter__input", [
-                //         // m(`input.filter__text[type=range]`, { min: 1, max: model.data.length, oninput: e => setRangeTarget(e) }),
-                //         // vnode.state.selected.length > 0 && model.data.map((doc, ind) => {
-                //         //     const isSelected = isSelectedCell(ind)
-                //         //     return m(`.filter__cell  ${isSelected ? "[data-selected=true]" : ""}`, doc.cellIndex)
-                //         // })
-                //     ])
-                // ]),
                 m(".content", [
                     model.data.map((doc, ind) => {
                         const isSelected = isSelectedCell(ind);
-                        // const { hatalaTime, bekiaTime, hafradaTime } = getWarningObj(doc);
-                        // console.log(`index: #${doc.cellIndex} \n`, hatalaTime, bekiaTime, hafradaTime)
+                        const warningObj = getWarningObj(doc);
                         return m(`.cell#cell${doc.cellIndex}`, { class: isSelected ? "cell--selected" : "" }, [
                             m(".cell__index", {
                                 onclick: e => toggleSelect(e, ind),
@@ -371,7 +409,8 @@ export const Main = node => {
                             ),
                             model.forms.items.map(headerKey => {
                                 const field = model.headers[headerKey];
-                                const isWarning = getWarning(doc, ind, headerKey);
+                                // const isWarning = getWarning(doc, ind, headerKey);
+                                const isWarning = warningObj[headerKey]
                                 const { displayValue, isEmpty } = getDisplayValue(doc[headerKey], field.type);
                                 return m(".cell__item", { class: field.class },
                                     m(".cell__caption", { onclick: e => setDefaultValue(ind, headerKey) }, field.label),
