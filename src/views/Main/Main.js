@@ -20,8 +20,6 @@ import { deleteOne } from "../../data/set/deleteOne";
 // views
 // Top
 export const Main = node => {
-
-
     // ======================
     //      DATA:
     // ======================
@@ -34,6 +32,7 @@ export const Main = node => {
         verifired: "verifired",
         estimate: "estimate"
     }
+
     const CELL_STATUS = {
         active: "active",
         empty: "empty",
@@ -62,11 +61,19 @@ export const Main = node => {
     const FILTER_WARNING = [
         {
             id: "none",
-            label: "ללא אזהרה",
+            label: "ללא התראה",
             action: e => null
         }, {
-            id: "bekia",
-            label: "אזהרת בקיעה",
+            id: "hatalaTime",
+            label: "התראת הטלה",
+            action: e => null
+        }, {
+            id: "bekiaTime",
+            label: "התראת בקיעה",
+            action: e => null
+        }, {
+            id: "hafradaTime",
+            label: "התראת הפרדה",
             action: e => null
         }
     ]
@@ -321,7 +328,7 @@ export const Main = node => {
                 }
                 break;
             case "filterCells":
-                action = e => null
+                action = false
                 break;
         }
         node.state.popUp = { content, type, title, ind, action, input }
@@ -336,18 +343,43 @@ export const Main = node => {
         node.state.selected = []
         m.redraw()
     }
+    const hasWarningFilters = () => node.state.filters.warning.length > 0 && node.state.filters.warning.length < FILTER_WARNING.length
 
-    const setRangeTarget = e => {
-        const targetCell = e.target.value
-        document.getElementById(`cell${targetCell}`).scrollIntoView();
-        m.route.set(m.route.get(), { focusOn: `cell${targetCell}` })
+    const toggleFilter = (filterType = "warning", filterKey) => {
+        const index = node.state.filters[filterType].findIndex(item => item === filterKey)
+        if (index > -1) node.state.filters[filterType].splice(index, 1)
+        else node.state.filters[filterType].push(filterKey)
     }
+
+    const isMatchWarnintFilter = (warningObj) => {
+        if (node.state.filters.warning.length == 0) return true // show all no filters
+        if (node.state.filters.warning.length == FILTER_WARNING.length) return true // show all - cannot use all filters
+        let isMatch = false
+        if (node.state.filters.warning.includes("none")) {
+            const hasSome = Object.keys(warningObj).some(key => warningObj[key] == true)
+            isMatch = !hasSome // no warning at all
+        }
+        Object.keys(warningObj).forEach(key => {
+            if (warningObj[key] == true && node.state.filters.warning.includes(key)) {
+                isMatch = true
+            }
+        })
+        return isMatch
+    }
+
+    const setRangeTarget = targetCell => {
+        const elemID = document.getElementById(targetCell)
+        if (elemID === null) return
+        elemID.scrollIntoView()
+    }
+
     return {
         editValue: { ind: -1, key: "" },
         menuOpen: false,
         filters: {
             cells: [],
-            warning: []
+            warning: ["hatalaTime", "bekiaTime", "hafradaTime"],
+            // warning: []
         },
         selected: [],
         popUp: false,
@@ -380,7 +412,7 @@ export const Main = node => {
                         }),
                         vnode.state.popUp.type === "filterCells" && m(".filter", [
                             m(".filter__input", [
-                                m(`input.filter__text[type=range]`, { min: 1, max: model.data.length, oninput: e => setRangeTarget(e) }),
+                                m(`input.filter__text[type=range]`, { min: 1, max: model.data.length, oninput: e => setRangeTarget(`cell${e.target.value}`) }),
                             ]),
                             // m(".filter__input",
                             //     model.data.map((doc, ind) => {
@@ -389,10 +421,15 @@ export const Main = node => {
                             //     })
                             // ),
                             m(".filter__input",
-                                FILTER_WARNING.map(opt => m(".filter__opt", { onclick: e => vnode.state.filters.warning.push(opt.id) }, opt.label))
+                                FILTER_WARNING.map(opt => m(".filter__opt", {
+                                    onclick: e => toggleFilter("warning", opt.id),
+                                    "data-active": vnode.state.filters.warning.includes(opt.id)
+                                },
+                                    opt.label)
+                                )
                             )
                         ]),
-                        m("button.button popUp__action", { onclick: e => vnode.state.popUp.action(e) }, "אשר")
+                        vnode.state.popUp.action && m("button.button popUp__action", { onclick: e => vnode.state.popUp.action(e) }, "אשר")
                     )
                 ),
                 m("img.logo", { src: "./img/logo.png" }),
@@ -400,7 +437,9 @@ export const Main = node => {
                     model.data.map((doc, ind) => {
                         const isSelected = isSelectedCell(ind);
                         const warningObj = getWarningObj(doc);
-                        return m(`.cell#cell${doc.cellIndex}`, { class: isSelected ? "cell--selected" : "" }, [
+                        let isMatch = isMatchWarnintFilter(warningObj)
+                        if (!isMatch) return null
+                        return m(`.cell#cell${doc.cellIndex}`, { key: doc.cellIndex, class: isSelected ? "cell--selected" : "" }, [
                             m(".cell__index", {
                                 onclick: e => toggleSelect(e, ind),
                                 class: isSelected ? "cell__index--selected" : ""
@@ -456,7 +495,8 @@ export const Main = node => {
                     },
                         m(Icon, { icon: vnode.state.menuOpen ? "icon-x" : "icon-menu" })
                     ),
-                    (vnode.state.selected.length > 0 && !vnode.state.menuOpen) ? m("span.menu__item-count menu--count", vnode.state.selected.length) : null
+                    (vnode.state.selected.length > 0 && !vnode.state.menuOpen) ? m("span.menu__item-count menu--count", vnode.state.selected.length) : null,
+                    // hasWarningFilters() && m(Icon, { class: "menu__filter", icon: "icon-filter", action: e => console.log(`TODO: toggleFilter`) })
                 )
             )
         }
