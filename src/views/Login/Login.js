@@ -36,8 +36,9 @@ export const Login = node => {
         loading: true,
         oninit: vnode => {
             Promise.resolve(setTimeout(() => {
-                if (auth.currentUser !== null) m.route.set("/")
                 vnode.state.loading = false;
+                if (auth.currentUser !== null) m.route.set("/")
+                // console.log(auth.currentUser)
                 m.redraw()
             }, 1500))
         },
